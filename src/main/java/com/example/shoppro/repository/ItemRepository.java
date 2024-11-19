@@ -1,8 +1,10 @@
 package com.example.shoppro.repository;
 
 import com.example.shoppro.entity.Item;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -36,9 +38,18 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     // 가격으로 검색
     public List<Item> findByPriceLessThan (Integer price);
+    public List<Item> findByPriceGreaterThan (Integer price);
+    public List<Item> findByPriceGreaterThanOrderByPriceAsc (Integer price);
+    public List<Item> findByPriceGreaterThanEqual (Pageable pageable, Integer price);
 
     // 정렬조건 까지 추가 (내림차순)
     List<Item> findByPriceLessThanOrderByPriceDesc (Integer price);
+
+    // nativeQuery 사용
+                                            // 데이터 베이스엔 자동으로 _가 붙어서 들어가기 때문에 데이터 베이스에
+                                            // 적힌 방식인 i.item_Nm 으로 쿼리문을 작성해줘야 정상작동한다.
+    @Query(value = "select * from Item i where i.item_Nm = :itemNm", nativeQuery = true)
+    List<Item> nativeQuerySelectWhereNameLike(String itemNm, Pageable pageable);
 
 
 }
