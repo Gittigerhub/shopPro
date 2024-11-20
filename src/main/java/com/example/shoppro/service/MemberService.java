@@ -7,6 +7,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service                        // 비즈니스 로직을 담당하는 서비스 계층 클래스에
@@ -16,7 +21,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Log4j2
 
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
     // 의존성 주입
     private ModelMapper modelMapper = new ModelMapper();
@@ -32,14 +37,68 @@ public class MemberService {
 
     // 회원가입
     public Member saveMember(MemberDTO memberDTO) {
+        // 회원가입여부 확인
 
+        validateDuplicateMember(memberDTO.getEmail());
 
-        return null;
+        //컨트롤러에서 받은  MemberDTO를 member entity로 변경
+
+        Member member =
+                memberDTO.dtoTOEntity(memberDTO);
+
+        member =
+                memberRepository.save(member);
+
+        return member;
 
     }
 
 
     // 회원가입시 회원가입여부를 확인하는 메소드
+    private void validateDuplicateMember(String email) {
+
+        Member member =
+                memberRepository.findByEmail(email);
+
+        // member가  null 이라는건 DB에 회원가입이
+        // 되어있지 않은 email이니 회원가입이 가능하고
+        // null이 아니라는건 DB에 회원이 가입되어있으니
+        // 회원가입을 막거나 예외처리등을 수행하자
+
+        if (member != null) {
+            throw new IllegalStateException("이미 가입된 회원입니다.");
+        }
+        // 이 내용은 try{}catch(IllegalStateException e) {
+        //          model.att~~("msg", e.get메시지)
+        // return "u/signup";}
+        // 처리가능
+
+    }
+
+    // 로그인
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        Member member =
+                memberRepository.findByEmail(email);
+
+        if (member == null) {
+            throw new UsernameNotFoundException(email);
+        }
+
+        return User.builder()
+                .username(member.getEmail())        // 세션에 저장됨
+                .password(member.getPassword())     // 로그인시 입력한 비밀번호와 비교할 값
+                .roles(member.getRole().name())     // String타입으로 반환
+                .build();
+
+    }
+
+
+
+
+
+
 
 
 

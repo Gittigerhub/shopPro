@@ -1,6 +1,7 @@
 package com.example.shoppro.entity;
 
 import com.example.shoppro.constant.ItemSellStatus;
+import com.example.shoppro.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Table(name = "item")
-public class Item {
+public class Item extends BaseEntity {
 
     @Id
     @Column(name = "item_id")           // 테이블에서 매핑될 컬럼

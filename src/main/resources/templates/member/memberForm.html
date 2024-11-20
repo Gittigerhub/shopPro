@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">   <!-- 얘는 들어가는 애이고 layout은 받는애이기 때문에 -->
+                                        <!-- layout1과 다르게 layout1에 들어가려면 한줄을 더 추가 작성 해준다. -->
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<body>
+
+
+    <th:block layout:fragment="content">
+
+        <!-- 폼 사이즈가 안맞아서 원하는 사이즈로 한번 더 틀을 만들어줌 -->
+        <div class="row">
+            <div class="col-8 offset-2">
+
+                <h1>회원가입</h1>
+
+                <!-- 가져온 부트스트랩 폼 디자인 -->
+                <form class="row g-3" action="/members/new" method="post" th:Object="${memberDTO}">
+
+                    <div class="col-12">
+                        <label for="name" class="form-label">이름</label>
+                        <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="이름을 입력해주세요.">
+                        <p style="font-size: small; color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError"></p>
+                        <span class="name"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">이메일</label>
+                        <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="이메일을 입력해주세요.">
+                        <p style="font-size: small; color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="password" class="form-label">비밀번호</label>
+                        <input type="password" th:field="*{password}" class="form-control" id="password" placeholder="비밀번호를 입력해주세요.">
+                        <p style="font-size: small; color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError"></p>
+                    </div>
+                    <div class="col-12">
+                        <label for="addr" class="form-label">주소</label>
+                        <input type="text" th:field="*{address}" class="form-control" id="addr" placeholder="주소를 입력해주세요.">
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="gridCheck">
+                            <label class="form-check-label" for="gridCheck">
+                                Check me out
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary">Sign in</button>
+                        <button type="submit" class="btn btn-primary">로그인</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+<!--        <script th:inline="javascript">-->
+<!--            let msg = [[${msg}]]-->
+<!--            if (msg) {-->
+<!--                alert(msg)-->
+<!--            }-->
+
+<!--            $("form").on("submit", function () {-->
+
+<!--                if (!nameValid()){-->
+<!--                    return false-->
+<!--                }-->
+
+<!--            })-->
+
+<!--            function nameValid() {-->
+<!--                let nameValue = $("#name").val();   // 함수를 실행했을 때 이름을 가져온다.-->
+<!--                if (nameValue.length < 2 || nameValue.length > 10) {-->
+<!--                    alert("이름은 2자이상 10자 이하여야 합니다.")-->
+<!--                    $(".name").text("이름은 2자이상 10자 이하여야 합니다.")-->
+<!--                    return false;-->
+<!--                }else {-->
+<!--                    return true;-->
+<!--                }-->
+
+<!--            }-->
+
+<!--        </script>-->
+
+
+    </th:block>
+
+    <!-- layout1.html에 만들어둔 layout:fragment="script"에 넣어줌 -->
+    <th:block layout:fragment="script">
+
+    </th:block>
+
+</body>
+</html>
