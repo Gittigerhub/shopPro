@@ -6,9 +6,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Data
+@Getter @Setter @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -37,7 +38,13 @@ public class Item extends BaseEntity {
     @Enumerated(EnumType.STRING)                // enum 가지고 많듬 YES/NO, SELL/SOLD_OUT
     private ItemSellStatus itemSellStatus;      // 상품 판매 상태 / enum
 
-    private LocalDateTime regTime;              // 상품 등록시간
-    private LocalDateTime updateTime;           // 상품 수정시간
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "member_id")
+//    private Member member;
+
+    // 나는 하나 자식은 많음
+    @OneToMany
+    @JoinColumn(name = "item_id")
+    private List<ItemImg> itemImgList;
 
 }

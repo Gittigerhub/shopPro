@@ -12,37 +12,108 @@
 
     <th:block layout:fragment="content">
 
-        <form action="" method="post">
+        <form action="/admin/item/new" method="post" th:object="${itemDTO}" enctype="multipart/form-data">
 
             <div class="row">
-                <div class="col">
-                    <div class="mb-3">
-                        <label for="itemNm" class="form-label">상품명</label>
-                        <input type="email" name="email" class="form-control" id="itemNm" placeholder="이메일을 입력해주세요.">
-                    </div>
+                <div class="col-8 offset-2">
+                    <div class="row">
 
-                    <div class="mb-3">
-                        <label for="price" class="form-label">재고</label>
-                        <input type="email" name="email" class="form-control" id="price" placeholder="이메일을 입력해주세요.">
-                    </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="itemNm" class="form-label">상품명</label>
+                                <input type="text" th:field="*{itemNm}" name="itemNm" class="form-control" id="itemNm">
+                                <p th:if="${#fields.hasErrors('itemNm')}" th:errors="*{itemNm}" class="fieldError"></p>
+                            </div>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="stockNumber" class="form-label">재고 수량</label>
-                        <input type="email" name="email" class="form-control" id="stockNumber" placeholder="이메일을 입력해주세요.">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">가격</label>
+                                <input type="number" min="0" th:field="*{price}" name="price" class="form-control" id="price">
+                                <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError"></p>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="stockNumber" class="form-label">재고 수량</label>
+                                <input type="number" min="0" class="form-control" th:field="*{stockNumber}" id="stockNumber">
+                                <p th:if="${#fields.hasErrors('stockNumber')}" th:errors="*{stockNumber}" class="fieldError"></p>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="itemDetail" class="form-label">상세설명</label>
+                                <textarea class="form-control" th:field="*{itemDetail}" name="itemDetail" id="itemDetail" rows="3"></textarea>
+                                <p th:if="${#fields.hasErrors('itemDetail')}" th:errors="*{itemDetail}" class="fieldError"></p>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="itemSellStatus" class="form-label">상품 판매 상태</label>
+                                <select class="form-select" aria-label="Default select example" th:field="*{itemSellStatus}" id="itemSellStatus">
+                                    <option value="SELL">판매중</option>
+                                    <option value="SOLD_OUT">품절</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="multipartFile" class="form-label">이미지 등록</label>
+                                <input class="form-control" name="multipartFile" type="file">
+                                <input class="form-control" name="multipartFile" type="file">
+                                <input class="form-control" name="multipartFile" type="file">
+                                <input class="form-control" name="multipartFile" type="file">
+                                <input class="form-control" name="multipartFile" type="file">
+                                <input class="form-control" name="multipartFile" type="file">
+                                <input class="form-control" name="multipartFile" type="file">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <button class="btn btn-primary">저장</button>
+                                <button type="button" class="btn btn-dark">목록</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
-
-            제품명 : <input> <br>
-            가격 : <input> <br>
-            재고 : <input> <br>
-            제품상세설명 : <textarea></textarea> <br>
-            이미지 파일
 
         </form>
 
     </th:block>
 
+    <th:block layout:fragment="script">
+        <script>
+            $(document).ready(function () {
+                console.log($("#itemNm"));
+                console.log($("#itemNm").html());
+                console.log($("#itemNm").val());
+
+                $("form").on("submit", function (e) {
+                    console.log("가냐");
+                    if (itemNmValid()) {
+                        console.log("갔냐");
+                        return false;
+                    }
+
+                })
+
+                function itemNmValid() {
+                    let itemNmVal = $("#itemNm").val()
+                    if (itemNmVal.length < 2 || itemNmVal.length >50) {
+                        return true;
+                    }
+                }
+            })
+
+        </script>
+    </th:block>
 
 </body>
 </html>
