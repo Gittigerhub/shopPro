@@ -61,15 +61,13 @@
                         </div>
 
                         <div class="col-12">
-                            <div class="mb-3">
-                                <label for="multipartFile" class="form-label">이미지 등록</label>
-                                <input class="form-control" name="multipartFile" type="file">
-                                <input class="form-control" name="multipartFile" type="file">
-                                <input class="form-control" name="multipartFile" type="file">
-                                <input class="form-control" name="multipartFile" type="file">
-                                <input class="form-control" name="multipartFile" type="file">
-                                <input class="form-control" name="multipartFile" type="file">
-                                <input class="form-control" name="multipartFile" type="file">
+                            <div class="mb-3 imgA">
+                                <label for="formFile" class="form-label">대표이미지</label>
+                                <!-- input태그의 type이 file일 경우에만 accept속성을 사용할 수 있고,"image/*"은 모든 타입의 이미지 파일이 허용된다는 뜻이다.  -->
+                                <input class="form-control imgInput" id="formFile" accept="image/*" name="multipartFile" type="file">
+
+                                <button class="btn btn-primary addimg" type="button">이미지추가</button>
+
                             </div>
                         </div>
 
@@ -91,15 +89,19 @@
     <th:block layout:fragment="script">
         <script>
             $(document).ready(function () {
-                console.log($("#itemNm"));
-                console.log($("#itemNm").html());
-                console.log($("#itemNm").val());
 
                 $("form").on("submit", function (e) {
-                    console.log("가냐");
                     if (itemNmValid()) {
-                        console.log("갔냐");
                         return false;
+                    }
+
+                    if ($(".imgInput").first().val() == "") {
+                        // $(".mainimg").val() == ""
+                        // 대표이미지가 없을경우
+                        alert("대표이미지를 넣어주세요")
+
+                        return false;
+
                     }
 
                 })
@@ -110,6 +112,36 @@
                         return true;
                     }
                 }
+
+                $(".addimg").on("click", function () {
+                    let str = `<input class="form-control imgInput" name="multipartFile" type="file">`
+                    $(".imgA").append(str);
+                })
+
+                // 이미지 파일 유효성
+                function bindDomEvent() {
+                    $(".imgInput").on("change", "impuit", function () {
+                        // split("\\") = \\기준으로 자른다 , pop() = 배열의 마지막 요소를 제거한 후, 제거한 요소를 반환
+                        let fileName = $(this).val().split("\\").pop()  // 이미지 파일명
+                        // 이미지 파일명의 확장자를 추출해서 확인한다.
+                        // tiger.jpg
+
+                        let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1 )
+
+                        // 확장자 소문자로 변환
+                        fileExt = fileExt.toLowerCase()
+
+                        if (fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp") {
+                            // 이미지 타입이 아니라면
+                            $(this).val()
+                            alert("이미지 파일만 넣어주세요")
+                            return false;
+
+                        }
+
+                    })
+                }
+
             })
 
         </script>

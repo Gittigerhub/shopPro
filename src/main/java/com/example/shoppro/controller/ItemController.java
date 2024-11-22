@@ -1,18 +1,21 @@
 package com.example.shoppro.controller;
 
 import com.example.shoppro.DTO.ItemDTO;
+import com.example.shoppro.DTO.PageRequestDTO;
+import com.example.shoppro.DTO.PageResponseDTO;
 import com.example.shoppro.service.ItemService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -102,18 +105,40 @@ public class ItemController {
 
     }
 
-    @GetMapping("/admin/read")
-    public String adminread(Long id, Model model) {
+    @GetMapping("/admin/item/read")
+    public String adminread(Long id, Model model, RedirectAttributes redirectAttributes) {
 
-        ItemDTO itemDTO =
-                itemService.read(id);
+        try {
+            ItemDTO itemDTO =
+                    itemService.read(id);
 
-        model.addAttribute("itemDTO", itemDTO);
+            model.addAttribute("itemDTO", itemDTO);
 
-        return "item/read";
+            return "item/read";
+
+        }catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute("msg", "존재하지 않는 상품입니다.");
+
+            return "redirect:/admin/item/list";
+
+        }
 
     }
 
+    @GetMapping("/admin/item/list")
+    public String adminlist(PageRequestDTO pageRequestDTO, Model model, Principal principal) {
+
+//        model.addAttribute("list", itemService.list());
+
+        PageResponseDTO<ItemDTO> pageResponseDTO =
+            itemService.list(pageRequestDTO, principal.getName());
+
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+
+
+        return "item/list";
+
+    }
 
 
 

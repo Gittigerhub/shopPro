@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">   <!-- 얘는 들어가는 애이고 layout은 받는애이기 때문에 -->
+                                        <!-- layout1과 다르게 layout1에 들어가려면 한줄을 더 추가 작성 해준다. -->
+<head>
+    <meta charset="UTF-8">
+    <title>아이템 등록</title>
+</head>
+<body>
+
+
+    <th:block layout:fragment="content">
+
+        <th:block th:if="${not #lists.isEmpty(pageResponseDTO.dtoList)}" th:each="list: ${pageResponseDTO.dtoList}">
+
+            <ul>
+                <li th:text="${list.itemNm}"></li>
+            </ul>
+
+        </th:block>
+
+        <th:block th:if ="${#lists.isEmpty(pageResponseDTO.dtoList)}">
+
+            <h1>게시물이 없습니다.</h1>
+
+        </th:block>
+
+    </th:block>
+
+</body>
+</html>

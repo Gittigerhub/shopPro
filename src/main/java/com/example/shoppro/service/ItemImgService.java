@@ -40,16 +40,14 @@ public class ItemImgService {
 
                     // DB저장 Local 저장 두개가 필요함
                     // Local 저장, 물리적인 저장    >   하기위해 FileService를 만듬
-                    fileService.uploadFile(img);    // 시그니처 추가 필요
+                    String savedFileName =              // UUID가 포함된 물리적인 파일이름
+                        fileService.uploadFile(img);    // 시그니처 추가 필요
 
                     // DB저장
                     // 엔티티를 가져왔다면 중복코드를 사용 할 필요가 없어진다. 해볼것
                     // 엔티티 repository를 의존성 주입
                     Item item =
                             itemRepository.findById(id).get();
-
-                    String savedFileName =              // UUID가 포함된 물리적인 파일이름
-                            fileService.uploadFile(img);
 
                     String imgUrl = "/images/item/" + savedFileName;
 

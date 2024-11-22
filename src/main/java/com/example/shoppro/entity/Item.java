@@ -43,8 +43,8 @@ public class Item extends BaseEntity {
 //    private Member member;
 
     // 나는 하나 자식은 많음
-    @OneToMany
-    @JoinColumn(name = "item_id")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL) // cascade = CascadeType.ALL => Fk쪽에서 모든걸 관여한다는 뜻
+//    @JoinColumn(name = "item_id")   // 사실상은 여기는 이걸 적을필요 없음, FK쪽이 주도권 있음
     private List<ItemImg> itemImgList;
 
 }
